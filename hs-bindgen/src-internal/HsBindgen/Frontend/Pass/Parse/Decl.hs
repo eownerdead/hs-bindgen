@@ -6,8 +6,8 @@ import Data.List qualified as List
 
 import Clang.Enum.Simple
 import Clang.HighLevel qualified as HighLevel
-import Clang.HighLevel.Types
 import Clang.HighLevel.Documentation
+import Clang.HighLevel.Types
 import Clang.LowLevel.Core
 
 import HsBindgen.Errors
@@ -73,7 +73,7 @@ handleTypeException ::
   -> ParseDecl (Maybe [C.Decl Parse])
 handleTypeException curr err = do
     info <- getDeclInfo curr
-    recordTrace $ ParseUnsupportedType info err
+    recordTrace info $ ParseUnsupportedType info err
     return Nothing
 
 {-------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ structDecl info = simpleFold $ \curr -> do
             partitionChildren xs
               | null unused = return $ Just (used, fields)
               | otherwise   = do
-                  recordTrace $ ParseUnsupportedImplicitFields info
+                  recordTrace info $ ParseUnsupportedImplicitFields info
                   return Nothing
               where
                 otherDecls :: [C.Decl Parse]
@@ -406,13 +406,14 @@ functionDecl info = simpleFold $ \curr -> do
         let isDefn = declCls == Definition
 
         if not (null anonDecls) then do
-          recordTrace $ ParseUnexpectedAnonInSignature info
+          recordTrace info $ ParseUnexpectedAnonInSignature info
           return []
         else do
           when (visibilityCanCauseErrors visibility linkage isDefn) $
-            recordTrace $ ParseNonPublicVisibility info
+            recordTrace info $ ParseNonPublicVisibility info
           when (isDefn && linkage == ExternalLinkage) $
-            recordTrace $ ParsePotentialDuplicateSymbol info (visibility == PublicVisibility)
+            recordTrace info $
+              ParsePotentialDuplicateSymbol info (visibility == PublicVisibility)
           return $ otherDecls ++ [mkDecl purity]
   where
     guardTypeFunction ::
@@ -500,23 +501,23 @@ varDecl info = simpleFold $ \curr -> do
                    || (isTentative && declCls == DefinitionUnavailable)
 
         if not (null anonDecls) then do
-          recordTrace $ ParseUnexpectedAnonInExtern info
+          recordTrace info $ ParseUnexpectedAnonInExtern info
           return []
         else (otherDecls ++) <$> do
           when (visibilityCanCauseErrors visibility linkage isDefn) $
-            recordTrace $ ParseNonPublicVisibility info
+            recordTrace info $ ParseNonPublicVisibility info
           when (isDefn && linkage == ExternalLinkage) $
-            recordTrace $ ParsePotentialDuplicateSymbol info (visibility == PublicVisibility)
+            recordTrace info $ ParsePotentialDuplicateSymbol info (visibility == PublicVisibility)
           case cls of
             VarGlobal -> do
               return [mkDecl $ C.DeclGlobal typ]
             VarConst -> do
               return [mkDecl $ C.DeclConst typ]
             VarThreadLocal -> do
-              recordTrace $ ParseUnsupportedTLS info
+              recordTrace info $ ParseUnsupportedTLS info
               return []
             VarUnsupported storage -> do
-              recordTrace $ ParseUnknownStorageClass info storage
+              recordTrace info $ ParseUnknownStorageClass info storage
               return []
   where
     -- Look for nested declarations inside the global variable type
