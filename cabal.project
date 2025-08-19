@@ -1,10 +1,11 @@
-packages: ansi-diff
-packages: c-expr
-packages: clang
-packages: hs-bindgen
-packages: hs-bindgen-runtime
-packages: hs-bindgen-test-runtime
-packages: userland-capi
+packages:
+  ansi-diff
+  c-expr
+  clang
+  hs-bindgen
+  hs-bindgen-runtime
+  hs-bindgen-test-runtime
+  userland-capi
 
 tests: True
 benchmarks: True
