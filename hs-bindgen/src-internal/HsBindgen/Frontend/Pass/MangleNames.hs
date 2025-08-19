@@ -30,15 +30,12 @@ import Data.Bitraversable (bimapM)
 -------------------------------------------------------------------------------}
 
 mangleNames ::
-     C.TranslationUnit HandleTypedefs
+     FixCandidate Maybe
+  -> C.TranslationUnit HandleTypedefs
   -> (C.TranslationUnit MangleNames, [Msg MangleNames])
-mangleNames unit =
+mangleNames fc unit =
     (unit', errors1 ++ errors2)
   where
-    -- TODO: This should be configurable
-    fc :: FixCandidate Maybe
-    fc = FixCandidate.fixCandidateDefault
-
     nameMap :: NameMap
     errors1 :: [Msg MangleNames]
     (nameMap, errors1) = chooseNames fc (C.unitDecls unit)

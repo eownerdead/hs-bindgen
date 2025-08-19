@@ -126,7 +126,7 @@ frontend tracer FrontendConfig{..} BootArtefact{..} = do
         (afterHandleTypedefs, msgsHandleTypedefs) =
           handleTypedefs afterSelect
         (afterMangleNames, msgsMangleNames) =
-          mangleNames afterHandleTypedefs
+          mangleNames configFixCandidate afterHandleTypedefs
 
     -- TODO https://github.com/well-typed/hs-bindgen/issues/967: By emitting
     -- all traces in one place, we lose the callstack and timestamp

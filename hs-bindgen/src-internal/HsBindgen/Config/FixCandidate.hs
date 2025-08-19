@@ -65,6 +65,15 @@ data FixCandidate m = FixCandidate {
     , onReservedName :: Text -> Text
     }
 
+instance Eq (FixCandidate a) where
+    _ == _ = False -- TODO
+
+instance Show (FixCandidate a) where
+    show _ = "{ ... }" -- TODO
+
+instance Default (FixCandidate Maybe) where
+    def = fixCandidateDefault
+
 {-------------------------------------------------------------------------------
   Instances
 -------------------------------------------------------------------------------}

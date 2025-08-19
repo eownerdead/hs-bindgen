@@ -12,6 +12,7 @@ module HsBindgen.Config
   ) where
 
 import Clang.Args
+import HsBindgen.Config.FixCandidate (FixCandidate)
 import HsBindgen.Backend.Artefact.HsModule.Translation
 import HsBindgen.Backend.Hs.Translation
 import HsBindgen.Backend.UniqueId
@@ -62,6 +63,7 @@ data FrontendConfig = FrontendConfig {
     , frontendParsePredicate  :: ParsePredicate
     , frontendSelectPredicate :: SelectPredicate
     , frontendProgramSlicing  :: ProgramSlicing
+    , configFixCandidate    :: FixCandidate Maybe
     }
   deriving stock (Show, Eq, Generic)
   deriving anyclass Default

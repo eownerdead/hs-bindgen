@@ -24,7 +24,7 @@ import Data.Bifunctor (Bifunctor (bimap))
 import Data.Char qualified as Char
 import Data.Either (partitionEithers)
 import Data.List qualified as List
-import Data.Maybe (catMaybes)
+import Data.Maybe (catMaybes, fromMaybe)
 import Data.Text (Text)
 import Data.Text qualified as Text
 import Optics (set)
@@ -34,6 +34,7 @@ import Options.Applicative.Help (Doc, align, extractChunk, pretty, tabulate,
                                  vcat, (<+>))
 import Prettyprinter.Util (reflow)
 
+import HsBindgen.Config.FixCandidate
 import HsBindgen.Lib
 
 {-------------------------------------------------------------------------------
@@ -168,6 +169,7 @@ parseFrontendConfig = FrontendConfig
     <*> parseParsePredicate
     <*> parseSelectPredicate
     <*> parseProgramSlicing
+    <*> parseFixCandidate
 
 parseBackendConfig :: Parser BackendConfig
 parseBackendConfig = BackendConfig
@@ -449,6 +451,20 @@ parseProgramSlicing = flag DisableProgramSlicing EnableProgramSlicing $ mconcat 
         <> "Select declarations using the selection predicate, "
         <> "and also select their transitive dependencies"
     ]
+
+parseFixCandidate :: Parser (FixCandidate Maybe)
+parseFixCandidate = do
+    prefix <- fromMaybe "" <$> optional (strOption $ mconcat [
+        help "Prefix to strip from names"
+      , metavar "PREFIX"
+      , long "strip-prefix"
+      ])
+    return $ fixCandidateDefault {
+        applyRuleSet = applyRuleSet fixCandidateDefault . dropPrefix prefix
+    }
+  where
+    dropPrefix :: Text -> Text -> Text
+    dropPrefix prefix x = fromMaybe x (Text.stripPrefix prefix x)
 
 {-------------------------------------------------------------------------------
   Input arguments
