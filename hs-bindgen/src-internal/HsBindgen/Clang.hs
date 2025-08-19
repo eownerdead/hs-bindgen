@@ -220,7 +220,7 @@ withExtraClangArgs :: HasCallStack
   -> ClangArgs -> (ClangArgs -> IO a) -> IO a
 withExtraClangArgs tracer args k = do
   extraClangArgs <- getExtraClangArgs tracer (fst <$> clangTarget args)
-  k $ args { clangOtherArgs = clangOtherArgs args <> extraClangArgs }
+  k $ args { clangExtraArgs = extraClangArgs }
 
 {-------------------------------------------------------------------------------
   Auxiliary functions.

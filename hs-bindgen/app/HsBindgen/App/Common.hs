@@ -190,8 +190,12 @@ parseClangArgs = do
     clangStdInc           <- not <$> parseNoStdInc
     clangExtraIncludeDirs <- parseIncludeDirOptions
     clangDefineMacros     <- parseDefineMacroOptions
-    clangOtherArgs        <- parseOtherArgs
-    pure ClangArgs {..}
+    clangUserArgs         <- parseUserArgs
+    pure $ ClangArgs {
+        clangExtraArgs    = []
+      , clangInternalArgs = []
+      , ..
+      }
 
 parseTarget :: Parser (Target, TargetEnv)
 parseTarget = option (maybeReader readTarget) $ mconcat [
@@ -287,8 +291,8 @@ parseEnableBlocks = switch $ mconcat [
     , help "Enable the 'blocks' language feature"
     ]
 
-parseOtherArgs :: Parser [String]
-parseOtherArgs = many . strOption $ mconcat [
+parseUserArgs :: Parser [String]
+parseUserArgs = many . strOption $ mconcat [
       long "clang-option"
     , metavar "OPTION"
     , help "Pass option to libclang"

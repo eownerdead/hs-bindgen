@@ -75,10 +75,22 @@ data ClangArgs = ClangArgs {
       -- @Block.h@ header.
     , clangEnableBlocks :: Bool
 
-      -- | Other arguments
+      -- | Arguments specified by the user, for example, when calling library
+      -- functions or on the command line
       --
       -- See https://clang.llvm.org/docs/ClangCommandLineReference.html
-    , clangOtherArgs :: [String]
+    , clangUserArgs :: [String]
+
+      -- | Arguments internally specified by @hs-bindgen@
+      --
+      -- See https://clang.llvm.org/docs/ClangCommandLineReference.html
+    , clangInternalArgs :: [String]
+
+      -- | Arguments provided by the environment variable
+      -- @BINDGEN_EXTRA_CLANG_ARGS@
+      --
+      -- See https://clang.llvm.org/docs/ClangCommandLineReference.html
+    , clangExtraArgs :: [String]
     }
   deriving stock (Show, Eq)
 
@@ -91,7 +103,9 @@ instance Default ClangArgs where
     , clangExtraIncludeDirs = []
     , clangDefineMacros     = []
     , clangEnableBlocks     = False
-    , clangOtherArgs        = []
+    , clangUserArgs         = []
+    , clangInternalArgs     = []
+    , clangExtraArgs   = []
     }
 
 -- | C standard
@@ -187,7 +201,11 @@ fromClangArgs ClangArgs{..} = aux [
         | defn <- clangDefineMacros
         ]
 
-    , return clangOtherArgs
+    -- NOTE: The order of command line arguments is significant. For example,
+    -- include directory specifications are parsed from left to right.
+    , return clangUserArgs
+    , return clangInternalArgs
+    , return clangExtraArgs
     ]
   where
     aux :: [Except InvalidClangArgs [String]] -> Either InvalidClangArgs [String]
