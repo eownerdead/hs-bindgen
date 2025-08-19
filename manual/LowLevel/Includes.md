@@ -170,9 +170,6 @@ Clang environment variables, described above.
 * `-I <directory>` adds a directory to the bracket C include search path.
   (Clang option: `-I`)
 
-* `--no-stdinc` disables the default include directories.  (Clang option:
-  `-nostdinc`)
-
 Clang has many more include options, which may be passed via `--clang-option`
 options.  For example, Clang option `-idirafter` may be used to add a directory
 to the end of the bracket C include search path.
