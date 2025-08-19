@@ -156,3 +156,5 @@ jobs:
           cp ../../cabal.project.local .
           cabal run manual
 
+      - name: Travis experiment (temporary)
+        run: cabal run hs-bindgen-cli get-resource-dir

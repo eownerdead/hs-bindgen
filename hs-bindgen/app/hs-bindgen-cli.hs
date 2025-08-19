@@ -29,11 +29,13 @@ main = handle exceptionHandler $ execCli =<< getCli
 
 execCli :: Cli -> IO ()
 execCli Cli{..} = case cliCmd of
-    CliCmdPreprocess  cmdOpts -> execPreprocess      cliGlobalOpts cmdOpts
-    CliCmdGenTests    cmdOpts -> execGenTests        cliGlobalOpts cmdOpts
-    CliCmdLiterate    cmdOpts -> execLiterate                      cmdOpts
-    CliCmdBindingSpec subCmd  -> execBindingSpec     cliGlobalOpts subCmd
-    CliCmdResolve     cmdOpts -> execResolve         cliGlobalOpts cmdOpts
+    CliCmdPreprocess  cmdOpts   -> execPreprocess      cliGlobalOpts cmdOpts
+    CliCmdGenTests    cmdOpts   -> execGenTests        cliGlobalOpts cmdOpts
+    CliCmdLiterate    cmdOpts   -> execLiterate                      cmdOpts
+    CliCmdBindingSpec subCmd    -> execBindingSpec     cliGlobalOpts subCmd
+    CliCmdResolve     cmdOpts   -> execResolve         cliGlobalOpts cmdOpts
+    CliCmdClangPrintResourceDir -> clangPrintResourceDir
+    CliCmdGetResourceDir        -> print =<< getResourceDir
 
 {-------------------------------------------------------------------------------
   Commands

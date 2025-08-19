@@ -118,6 +118,10 @@ module HsBindgen.Lib (
     -- ** Tracers
   , Common.withTracer
 
+    -- * Utility functions
+  , HsBindgen.Clang.BuiltinIncludeDir.clangPrintResourceDir
+  , HsBindgen.Clang.BuiltinIncludeDir.getResourceDir  -- TODO REMOVE
+
     -- * Re-exports
   , Common.Default (..)
   , HsBindgen.I (..)
@@ -133,6 +137,7 @@ import HsBindgen qualified
 import HsBindgen.Backend.Artefact.PP.Render qualified as Backend.PP
 import HsBindgen.Backend.Artefact.PP.Translation qualified as Backend.PP
 import HsBindgen.BindingSpec qualified as BindingSpec
+import HsBindgen.Clang.BuiltinIncludeDir qualified
 import HsBindgen.Util.Tracer qualified as Tracer
 
 import Clang.Paths qualified as Paths

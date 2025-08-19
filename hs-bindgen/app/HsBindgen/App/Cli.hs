@@ -67,6 +67,8 @@ data CliCmd =
   | CliCmdLiterate    LiterateOpts
   | CliCmdBindingSpec BindingSpecCmd
   | CliCmdResolve     ResolveOpts
+  | CliCmdClangPrintResourceDir
+  | CliCmdGetResourceDir  -- TODO REMOVE
   deriving (Show)
 
 parseCliCmd :: Parser CliCmd
@@ -89,6 +91,12 @@ parseCliCmd = subparser $ mconcat [
         ]
     , cmd "resolve" (CliCmdResolve <$> parseResolveOpts) $ mconcat [
           progDesc "Resolve C headers to source paths, for debugging"
+        ]
+    , cmd "clang-print-resource-dir" (pure CliCmdClangPrintResourceDir) $ mconcat [
+          progDesc "Print the Clang resource directory (may be relative to prefix)"
+        ]
+    , cmd "get-resource-dir" (pure CliCmdGetResourceDir) $ mconcat [
+          progDesc "Get resource directory"
         ]
     ]
 
