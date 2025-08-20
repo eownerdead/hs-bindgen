@@ -42,7 +42,7 @@ translateDecls decls
 -- 20250429 this function will change,
 -- but for now we find the includes to test addCSource functionality
 csources :: [Hs.Decl] -> String
-csources decls = unlines $ headers ++ bodies
+csources decls = unlines $ ["#define const"] ++ headers ++ bodies
   where
     -- It is important that we don't include the same header more than once,
     -- /especially/ for non-extern non-static globals.
