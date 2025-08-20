@@ -5,6 +5,7 @@ module HsBindgen.Runtime.LibC (
   , CFexceptT
 
     -- * Mathematical Types
+  , CImaxdivT(..)
   , CDivT(..)
   , CLdivT(..)
   , CLldivT(..)

@@ -45,6 +45,7 @@ module HsBindgen.Runtime.Prelude (
   , LibC.CFexceptT
 
     -- * Mathematical types
+  , LibC.CImaxdivT(..)
   , LibC.CDivT(..)
   , LibC.CLdivT(..)
   , LibC.CLldivT(..)
